@@ -80,7 +80,30 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
+//Are what allow us to add data,delete data, etc
+const Mutation = new GraphQLObjectType({
+  name: 'Mutation',
+  fields: {
+    addAuthor: {
+      type: AuthorType,
+      args: {
+        name: { type: GraphQLString },
+        age: { type: GraphQLInt },
+      },
+      resolve(parent, args) {
+        //this is Author model
+        let author = new Author({
+          name: args.name,
+          age: args.age,
+        });
+        return author.save();
+      },
+    },
+  },
+});
+
 //this is what they will be querrying in the frontend
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation: Mutation,
 });
